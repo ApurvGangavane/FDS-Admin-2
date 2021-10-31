@@ -1,0 +1,128 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="my-3">
+    <h1 class="text-light">Beverages</h1>
+</div>
+<% for (let product of products) { %>
+    <% if(product.category === 'beverages') {%> 
+        <div class="card card-index mb-3">
+            <div class="row">
+                <div class="col-md-4 d-flex alig-items-center justify-content-center">
+                    <img class="img-fluid" alt="" src= <%= product.image.url %> width="250" height="250"> 
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">                  
+                        <h3 class="card-title"><%= product.name %>  </h3>
+                        
+                        <h4 class="card-subtitle mt-3 mb-3">Rs. <%= product.price %></h4>
+                        <p class="card-text text-<%= product.availability === 'available' ? 'success' : 'danger' %>"><%= product.availability %></p>
+                        <div class="d-flex align-items-center">
+                            <a href="/products/<%= product._id%>/edit" class="btn btn-new-submit">Edit</a>
+                            <form action="/products/<%= product._id %>?_method=DELETE" method="POST" class="d-inline">
+                                <button class="btn btn-danger mx-2">Delete</button>
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    <% } %> 
+<% } %>
+
+<div class="my-3">
+    <h1 class="text-light">Snacks</h1>
+</div>
+<% for (let product of products) { %>
+    <% if(product.category === 'snacks') {%> 
+        <div class="card card-index mb-3">
+            <div class="row">
+                <div class="col-md-4 d-flex alig-items-center justify-content-center">
+                    <img class="img-fluid" alt="" src= <%= product.image.url %> width="250" height="250"> 
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">                  
+                        <h3 class="card-title"><%= product.name %>  </h3>
+                        
+                        <h4 class="card-subtitle mt-3 mb-3">Rs. <%= product.price %></h4>
+                        <p class="card-text text-<%= product.availability === 'available' ? 'success' : 'danger' %>"><%= product.availability %></p>
+                        <div class="d-flex align-items-center">
+                            <a href="/products/<%= product._id%>/edit" class="btn btn-new-submit">Edit</a>
+                            <form action="/products/<%= product._id %>?_method=DELETE" method="POST" class="d-inline">
+                                <button class="btn btn-danger mx-2">Delete</button>
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    <% } %> 
+<% } %>
+
+<div class="my-3">
+    <h1 class="text-light">Household Supplies</h1>
+</div>
+<% for (let product of products) { %>
+    <% if(product.category === 'householdsupplies') {%> 
+        <div class="card card-index mb-3">
+            <div class="row">
+                <div class="col-md-4 d-flex alig-items-center justify-content-center">
+                    <img class="img-fluid" alt="" src= <%= product.image.url %> width="250" height="250"> 
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">                  
+                        <h3 class="card-title"><%= product.name %>  </h3>
+                        
+                        <h4 class="card-subtitle mt-3 mb-3">Rs. <%= product.price %></h4>
+                        <p class="card-text text-<%= product.availability === 'available' ? 'success' : 'danger' %>"><%= product.availability %></p>
+                        <div class="d-flex align-items-center">
+                            <a href="/products/<%= product._id%>/edit" class="btn btn-new-submit">Edit</a>
+                            <form action="/products/<%= product._id %>?_method=DELETE" method="POST" class="d-inline">
+                                <button class="btn btn-danger mx-2">Delete</button>
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    <% } %> 
+<% } %>
+
+<div class="my-3">
+    <h1 class="text-light">Cooking Supplies</h1>
+</div>
+<% for (let product of products) { %>
+    <% if(product.category === 'cookingsupplies') {%> 
+        <div class="card card-index mb-3">
+            <div class="row">
+                <div class="col-md-4 d-flex alig-items-center justify-content-center">
+                    <img class="img-fluid" alt="" src= <%= product.image.url %> width="250" height="250"> 
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">                  
+                        <h3 class="card-title"><%= product.name %>  </h3>
+                        
+                        <h4 class="card-subtitle mt-3 mb-3">Rs. <%= product.price %></h4>
+                        <p class="card-text text-<%= product.availability === 'available' ? 'success' : 'danger' %>"><%= product.availability %></p>
+                        <div class="d-flex align-items-center">
+                            <a href="/products/<%= product._id%>/edit" class="btn btn-new-submit">Edit</a>
+                            <form action="/products/<%= product._id %>?_method=DELETE" method="POST" class="d-inline">
+                                <button class="btn btn-danger mx-2">Delete</button>
+                            </form>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    <% } %> 
+<% } %>
+
+
+

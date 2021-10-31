@@ -1,0 +1,118 @@
+<% layout('layouts/boilerplate') %>
+
+
+<div class="d-flex justify-content-around">
+    
+        
+            <div>
+                <p ><b class="text-light">Preparing</b></p>
+                <div class="card " style="width: 20rem;">
+                    <!-- <div class="row">
+                        <div class=" d-flex col-2 justify-content-center">No.</div>
+                        <div class="d-flex col-5 justify-content-center">Name</div>
+                        <div class="d-flex col-5 justify-content-center">Amount</div>
+                    </div> -->
+                    <table class="table table-bordered table-striped mb-2 table-success table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col"> No.</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Next</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <% for(let order of orders) {%>
+                                <% if(order.stage === 'preparing') {%>
+                                    
+                                    <tr>
+                                        <% let glass = order._id.toString() %> 
+                                        <% let orderNo = glass.slice(-4) %> 
+                                        <th scope="row"><%= orderNo %> </th>
+                                        <td><%= order.cartTotal %> </td>
+                                        <td>
+                                            <form action="/orders/dashboard/toprepared/<%= order._id %>" method="POST">
+                                                <button class="btn btn-new-submit">
+                                                    Next
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <% } %> 
+                            <% } %> 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div>
+                <p><b class="text-light">Prepared & Ready to Pickup</b></p>
+                <div class="card" style="width: 20rem;">
+                    <table class="table table-bordered table-striped mb-2 table-success table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col"> No. </th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Next</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <% for(let order of orders) {%>
+                                <% if(order.stage === 'prepared') { %> 
+                                    <tr>
+                                        <% let glass = order._id.toString() %> 
+                                        <% let orderNo = glass.slice(-4) %> 
+                                        <th scope="row"><%= orderNo %> </th>
+                                        <td><%= order.cartTotal %> </td>
+                                        <td> 
+                                            <form action="/orders/dashboard/topickedup/<%= order._id %>" method="POST">
+                                                <button class="btn btn-new-submit">
+                                                    Next
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <% } %> 
+                            <% } %> 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div>
+                <p><b class="text-light">Picked Up</b></p>
+                <div class="card" style="width: 20rem;">
+                    <table class="table table-bordered table-striped mb-2 table-success table-hover">
+                        <thead>
+                          <tr>
+                            <th scope="col"> No. </th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Next</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <% for(let order of orders) {%>
+                                <% if(order.stage === 'pickedup') { %>
+                                    <tr>
+                                        <% let glass = order._id.toString() %> 
+                                        <% let orderNo = glass.slice(-4) %> 
+                                        <th scope="row"><%= orderNo %> </th>
+                                        <td><%= order.cartTotal %> </td>
+                                        <td>
+                                            <form action="/orders/dashboard/toorderhistory/<%= order._id %>" method="POST">
+                                                <button class="btn btn-new-submit">
+                                                    Next
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <% } %>  
+                            <% } %> 
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-center m-3">
+                        <form action="/orders/map">
+                            <button class="btn btn-success" <%= len === 10 ? '' : 'disabled' %> >Route</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+</div>
+ 
