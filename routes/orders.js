@@ -9,28 +9,43 @@ const { GeneticAlgorithm } = require("../utils/tsp");
 
 const Order = require("../models/orders");
 
-//const finalStageOrder = new Array();
 global.finalMapData = new Array();
 
+function Corddistance(lat1, lat2, lon1, lon2) {
+  // The math module contains a function
+  // named toRadians which converts from
+  // degrees to radians.
+  lon1 = (lon1 * Math.PI) / 180;
+  lon2 = (lon2 * Math.PI) / 180;
+  lat1 = (lat1 * Math.PI) / 180;
+  lat2 = (lat2 * Math.PI) / 180;
+
+  // Haversine formula
+  let dlon = lon2 - lon1;
+  let dlat = lat2 - lat1;
+  let a =
+    Math.pow(Math.sin(dlat / 2), 2) +
+    Math.cos(lat1) * Math.cos(lat2) * Math.pow(Math.sin(dlon / 2), 2);
+
+  let c = 2 * Math.asin(Math.sqrt(a));
+
+  // Radius of earth in kilometers. Use 3956
+  // for miles
+  let r = 6371;
+
+  // calculate the result
+  return c * r;
+}
+
 async function outputDict(orders, answer) {
-  // const data = fs
-  //   .readFileSync("bestSolution.txt")
-  //   .toString()
-  //   .replace(/\r\n/g, "\n")
-  //   .split("\n");
-  //console.log(data[data.length - 2]);
   const finalOrder = answer;
-  // finalOrder.pop();
-  //console.log(finalOrder);
   finalMapData.length = 0;
-  // finalMapData.push({ latLng: { lat: 19.076, lng: 72.8777 } });
   for (let routeOrder of finalOrder) {
-    // routeOrder = parseInt(routeOrder);
-    if(routeOrder === 100){
+    if (routeOrder === 100) {
       finalMapData.push({
-        latLng: { lat: 19.076, lng: 72.8777 }
+        latLng: { lat: 19.076, lng: 72.8777 },
       });
-    }else{
+    } else {
       finalMapData.push({
         latLng: {
           lat: orders[routeOrder].lat,
@@ -38,7 +53,6 @@ async function outputDict(orders, answer) {
         },
       });
     }
-    
   }
   finalMapData.push({ latLng: { lat: 19.076, lng: 72.8777 } });
   console.log(finalMapData);
@@ -53,10 +67,9 @@ async function intoArray() {
         path: "product",
       },
     });
-  //console.log(orders.length);
 
   if (orders.length === 6) {
-    let ga_tsp = new GeneticAlgorithm(20, 20, 4, 0.2, 0.1);
+    let ga_tsp = new GeneticAlgorithm(100, 20, 4, 0.2, 0.1);
     let graph = new Graph();
     let charToIntDict = {
       0: "a",
@@ -69,30 +82,24 @@ async function intoArray() {
       7: "h",
       8: "i",
       9: "j",
-      100: "z"
+      100: "z",
     };
-    for(let orderIndex=0; orderIndex < 6; orderIndex++){
-      const x_i = 6400 * 72.8777 * Math.cos(19.022375);
-      const y_i = 6400 * 19.076;
-      const x_j = 6400 * orders[orderIndex].long * Math.cos(19.022375);
-      const y_j = 6400 * orders[orderIndex].lat;
-      let distance = Math.sqrt(
-        Math.pow(x_i - x_j, 2) + Math.pow(x_i - x_j, 2)
+    for (let orderIndex = 0; orderIndex < 6; orderIndex++) {
+      const distance = Corddistance(
+        19.076,
+        orders[orderIndex].lat,
+        72.8777,
+        orders[orderIndex].long
       );
-      graph.setAdjacent(
-        "z",
-        charToIntDict[orderIndex],
-        distance
-      );
+      graph.setAdjacent("z", charToIntDict[orderIndex], distance);
     }
     for (let orderInd = 0; orderInd < 6; orderInd++) {
-      const x_i = 6400 * orders[orderInd].long * Math.cos(19.022375);
-      const y_i = 6400 * orders[orderInd].lat;
       for (let orderInd2 = orderInd + 1; orderInd2 < 6; orderInd2++) {
-        const x_j = 6400 * orders[orderInd2].long * Math.cos(19.022375);
-        const y_j = 6400 * orders[orderInd2].lat;
-        let distance = Math.sqrt(
-          Math.pow(x_i - x_j, 2) + Math.pow(x_i - x_j, 2)
+        let distance = Corddistance(
+          orders[orderInd].lat,
+          orders[orderInd2].lat,
+          orders[orderInd].long,
+          orders[orderInd2].long
         );
         graph.setAdjacent(
           charToIntDict[orderInd],
@@ -105,35 +112,17 @@ async function intoArray() {
     console.log(Array.from(pathCost));
     const arrayPath = Array.from(pathCost);
     const answer = new Array();
-    for(let ct of arrayPath){
-      answer.push(parseInt(Object.keys(charToIntDict).find(key => {
-        return charToIntDict[key] === ct;
-      })))
+    for (let ct of arrayPath) {
+      answer.push(
+        parseInt(
+          Object.keys(charToIntDict).find((key) => {
+            return charToIntDict[key] === ct;
+          })
+        )
+      );
     }
     console.log(answer);
     await outputDict(orders, answer);
-
-    // fs.writeFileSync("tsp-project.tsp", "");
-    // fs.writeFileSync("bestSolution.txt", "");
-    // fs.appendFileSync(
-    //   "tsp-project.tsp",
-    //   "DIMENSION : 6\nEDGE_WEIGHT_TYPE : EUC_2D\nNODE_COORD_SECTION\n"
-    // );
-    // let count = 1;
-
-    // console.log(orders);
-    // for (let order of orders) {
-    //   //{ lat } = order;
-    //   //{ long } = order;
-    //   const x = 6400 * order.long * Math.cos(19.022375);
-    //   const y = 6400 * order.lat;
-    //   fs.appendFileSync("tsp-project.tsp", "\n" + count + " " + x + " " + y);
-    //   count += 1;
-    // }
-    // fs.appendFileSync("tsp-project.tsp", "\nEOF\n");
-    // await tsp.hello();
-    // await outputDict(orders);
-    //next();
   }
 }
 
@@ -159,8 +148,7 @@ router.get(
   isLoggedIn,
   catchAsync(async (req, res) => {
     const orders = await Order.find({}).populate("userId");
-    //console.log(finalStageOrder);
-    //console.log(finalStageOrder.length)
+
     const pickedOrders = await Order.find({ stage: "pickedup" });
     const len = pickedOrders.length;
     intoArray();
@@ -180,8 +168,7 @@ router.get(
           path: "product",
         },
       });
-    // console.log(orders);
-    // console.log(String(orders[0].orderNo))
+
     res.render("orders/history", { orders });
   })
 );
@@ -252,7 +239,6 @@ router.post(
 );
 
 router.get("/map", isLoggedIn, (req, res) => {
-  //console.log(finalMapData);
   res.render("map/index2", { finalMapData });
 });
 
