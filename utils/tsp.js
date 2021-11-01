@@ -95,7 +95,7 @@ class GeneticAlgorithm {
         newPopulation.push(offSpring);
       }
       for (let gen = 2 * elitismOffset; gen < this.populationSize; gen++) {
-        newPopulation[gen] = this.mutate(newPopulation[gen]);
+        newPopulation[gen] = this.mutate(newPopulation[gen], grph);
       }
 
       population = newPopulation;
@@ -163,13 +163,9 @@ class GeneticAlgorithm {
     }
     return offspring.join("");
   }
-  mutate(genome) {
+  mutate(genome, grph) {
     if (Math.random() < this.mutationRate) {
-      let { indexLow, indexHigh } = this.computeLowHighIndexes(genome);
-      while (indexLow === 0) {
-        indexLow = getRandomInt(0, indexHigh);
-      }
-      return this.swap(indexLow, indexHigh, genome);
+      return this.use2Opt(genome, grph);
     } else {
       return genome;
     }
@@ -195,7 +191,38 @@ class GeneticAlgorithm {
   converged(population) {
     return population.every((element) => element === population[0]);
   }
+  use2Opt(genome, grph, rept = 100) {
+    let nCities = genome.length;
+    // console.log(grph.getAdjacent("a")["b"]);
+    let genomeToRet = [...genome];
+    for (let _ = 0; _ < rept; _++) {
+      let isChanged = false;
+      for (let i = 1; i < nCities - 2; i++) {
+        for (let j = i + 2; j < nCities; j++) {
+          let currentCost =
+            grph.getAdjacent(genomeToRet[i])[genomeToRet[i + 1]] +
+            grph.getAdjacent(genomeToRet[j])[genomeToRet[j + 1]];
+          let newCost =
+            grph.getAdjacent(genomeToRet[i])[genomeToRet[j]] +
+            grph.getAdjacent(genomeToRet[i + 1])[genomeToRet[j + 1]];
+          let difference = newCost - currentCost;
+          if (difference < 0) {
+            let reversed = [...genomeToRet].slice(i + 1, j + 1);
+            for (let k = i + 1; k < j + 1; k++) {
+              genomeToRet[k] = reversed.pop();
+            }
+            isChanged = true;
+          }
+        }
+      }
+      if (!isChanged) {
+        break;
+      }
+    }
+    return genomeToRet.join("");
+  }
 }
+
 // let graph = new Graph();
 // graph.setAdjacent("a", "b", 4);
 // graph.setAdjacent("a", "c", 4);
