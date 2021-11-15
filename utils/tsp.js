@@ -166,8 +166,8 @@ class GeneticAlgorithm {
   mutate(genome) {
     if (Math.random() < this.mutationRate) {
       let { indexLow, indexHigh } = this.computeLowHighIndexes(genome);
-      while (indexLow === 0) {
-        indexLow = getRandomInt(0, indexHigh);
+      if (indexLow === 0) {
+        indexLow++;
       }
       return this.swap(indexLow, indexHigh, genome);
     } else {

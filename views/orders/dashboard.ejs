@@ -5,7 +5,7 @@
     
         
             <div>
-                <p ><b class="text-light">Preparing</b></p>
+                <p ><b class="text-light">Order Confirmed</b></p>
                 <div class="card " style="width: 20rem;">
                     <!-- <div class="row">
                         <div class=" d-flex col-2 justify-content-center">No.</div>
@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div>
-                <p><b class="text-light">Prepared & Ready to Pickup</b></p>
+                <p><b class="text-light">Packed & Ready to Pickup</b></p>
                 <div class="card" style="width: 20rem;">
                     <table class="table table-bordered table-striped mb-2 table-success table-hover">
                         <thead>
@@ -77,7 +77,7 @@
                 </div>
             </div>
             <div>
-                <p><b class="text-light">Picked Up</b></p>
+                <p><b class="text-light">Out for delivery</b></p>
                 <div class="card" style="width: 20rem;">
                     <table class="table table-bordered table-striped mb-2 table-success table-hover">
                         <thead>
@@ -109,7 +109,7 @@
                     </table>
                     <div class="d-flex justify-content-center m-3">
                         <form action="/orders/map">
-                            <button class="btn btn-success" <%= len === 10 ? '' : 'disabled' %> >Route</button>
+                            <button class="btn btn-success" <%= len === 6 ? '' : 'disabled' %> >Route</button>
                         </form>
                     </div>
                 </div>
